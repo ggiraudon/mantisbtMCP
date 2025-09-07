@@ -7,6 +7,7 @@ import { getProjectsTool } from './tools/getProjectsTool';
 import { getUserTool } from './tools/getUserTool';
 import { getCurrentUserTool } from './tools/getCurrentUserTool';
 import { createIssueNoteTool } from './tools/createIssueNoteTool';
+import { openCaseTool } from './tools/openCaseTool';
 import axios from 'axios';
 
 
@@ -24,6 +25,8 @@ server.addTool(getProjectsTool);
 //server.addTool(getUserTool);
 //server.addTool(getCurrentUserTool);
 server.addTool(createIssueNoteTool);
+server.addTool(openCaseTool);
+
 
 axios.interceptors.request.use(request => {
   console.log('Starting Request', JSON.stringify(request, null, 2))
