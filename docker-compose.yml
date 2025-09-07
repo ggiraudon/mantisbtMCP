@@ -1,0 +1,18 @@
+name: 'mantisbt-mcp-server'
+networks:
+  frontend:
+    name: lan
+    external: true
+  n8n:
+    external: true
+
+services:
+  mantisbt-mcp-server:
+    build: .
+    volumes:
+      - ./.env:/app/.env
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+    networks:
+      n8n: null
