@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { custom, z } from 'zod';
 import type { paths } from './api';
 
 // Extract types from the generated API types
@@ -68,6 +68,13 @@ export const CreateIssueSchema = z.object({
   severity: z.object({
     id: z.number(),
   }).optional(),
+  custom_fields: z.array(z.object({
+    field: z.object({
+      id: z.number(),
+    }),
+    value: z.any(),
+  })).optional(),
+
 });
 
 export type Issue = z.infer<typeof IssueSchema>;

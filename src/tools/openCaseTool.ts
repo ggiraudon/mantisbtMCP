@@ -16,12 +16,16 @@ export const openCaseTool: Tool<any> = {
     title: z.string().describe('Case title'),
     content: z.string().describe('Case content'),
     caseType: z.enum(['Sales', 'Support', 'Orders']).describe('Type of case'),
+    customer_email: z.string().describe('Email of the customer'),
+    customer_name: z.string().optional().describe('Name of the customer'),
   }),
   execute: async (args, context) => {
-    const { title, content, caseType } = args as {
+    const { title, content, caseType, customer_email, customer_name } = args as {
       title: string;
       content: string;
       caseType: 'Sales' | 'Support' | 'Orders';
+      customer_email: string;
+      customer_name?: string;
     };
     const summary = title;
     const description = content;
@@ -29,6 +33,16 @@ export const openCaseTool: Tool<any> = {
     const categoryId = categories.get(caseType);
     const priorityId = 1; // Default priority
     const severityId = 1; // Default severity
+    const customFields = [
+      {
+        field: { id: 2 }, // Example custom field ID for "Customer Name"
+        value: customer_name,
+      },
+      {
+        field: { id: 3 }, // Example custom field ID for "Customer Email"
+        value: customer_email,
+      },
+    ];
 
     const controller = new IssuesController();
     const issueData = {
@@ -36,8 +50,7 @@ export const openCaseTool: Tool<any> = {
       description,
       project: { id: projectId },
       ...(categoryId && { category: { id: categoryId } }),
-      ...(priorityId && { priority: { id: priorityId } }),
-      ...(severityId && { severity: { id: severityId } }),
+      ...(customFields && { custom_fields: customFields }),
     };
     
     const newIssue = await controller.createIssue(issueData);
